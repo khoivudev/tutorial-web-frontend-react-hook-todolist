@@ -19,9 +19,7 @@ function App() {
         const res = await axios.get("/api/todotask");
         setTodoList(res.data);
         setIsLoaded(true);
-      } catch (err) {
-        console.log("Oops");
-      }
+      } catch (err) {}
     };
     fetchTodoList();
   }, []);
@@ -58,11 +56,10 @@ function App() {
       const newTodoList = [...todoList];
       newTodoList.splice(index, 1);
       setTodoList(newTodoList);
-    } catch (err) {
-      console.log("Oops");
-    }
+    } catch (err) {}
     setIsLoaded(true);
   };
+
   const handleTodoCompletedBtnClick = async (todo) => {
     setIsLoaded(false);
     try {
@@ -81,9 +78,7 @@ function App() {
           });
           setTodoList(newTodoList);
         });
-    } catch (err) {
-      console.log("Oops");
-    }
+    } catch (err) {}
 
     setIsLoaded(true);
   };
@@ -98,10 +93,9 @@ function App() {
         const newTodoList = [...todoList];
         newTodoList.push(res.data);
         setTodoList(newTodoList);
+        setTodoStatus("all");
       });
-    } catch (err) {
-      console.log("Oops");
-    }
+    } catch (err) {}
     setIsLoaded(true);
   };
 
