@@ -7,7 +7,7 @@ TodoForm.propTypes = {
 };
 
 TodoForm.defautProps = {
-  obSubmit: null,
+  onSubmit: null,
 };
 
 function TodoForm(props) {
@@ -15,7 +15,6 @@ function TodoForm(props) {
   const [value, setValue] = useState("");
 
   function handleValueChange(e) {
-    console.log(e.target.value);
     setValue(e.target.value);
   }
 
@@ -35,6 +34,16 @@ function TodoForm(props) {
   return (
     <form onSubmit={handleSubmit}>
       <input type="text" value={value} onChange={handleValueChange} />
+      <button className="todo-button" type="submit" onClick={handleSubmit}>
+        <i className="fas fa-plus-square"></i>
+      </button>
+      <div className="select">
+        {/* <select name="todos" className="filter-todo">
+          <option value="all">All</option>
+          <option value="completed">Completed</option>
+          <option value="uncompleted">Uncompleted</option>
+        </select> */}
+      </div>
     </form>
   );
 }

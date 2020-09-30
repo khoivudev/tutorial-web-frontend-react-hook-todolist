@@ -13,21 +13,19 @@ function App() {
 
   useEffect(() => {
     async function fetchTodoList() {
-      console.log("getting data");
       try {
         const res = await axios.get("/api/todotask");
         setTodoList(res.data);
         setIsLoaded(true);
       } catch (err) {
-        console.log(err.message);
+        console.log("Oops");
       }
     }
     fetchTodoList();
   }, []);
 
-  async function handleTodoClick(todo) {
+  async function handleTodoDeleteBtnClick(todo) {
     setIsLoaded(false);
-    console.log("deleting data");
     try {
       await axios.delete(`/api/todotask/${todo._id}`);
       const index = todoList.findIndex((x) => x._id === todo._id);
@@ -36,13 +34,12 @@ function App() {
       newTodoList.splice(index, 1);
       setTodoList(newTodoList);
     } catch (err) {
-      console.log(err.message);
+      console.log("Oops");
     }
     setIsLoaded(true);
   }
 
   async function handleTodoFormSubmit(formValues) {
-    console.log("adding data");
     setIsLoaded(false);
     try {
       const newTodo = {
@@ -54,21 +51,26 @@ function App() {
         setTodoList(newTodoList);
       });
     } catch (err) {
-      console.log(err.message);
+      console.log("Oops");
     }
     setIsLoaded(true);
   }
 
   return (
-    <div className="app">
-      <h1>React hooks- Todolist</h1>
+    <div className="App">
+      <header>
+        <h1>VHK's Todo List</h1>
+      </header>
       {isLoaded ? (
         <div>
           <TodoForm onSubmit={handleTodoFormSubmit} />
-          <TodoList todos={todoList} onTodoClick={handleTodoClick} />
+          <TodoList
+            todos={todoList}
+            onTodoTrashBtnClick={handleTodoDeleteBtnClick}
+          />
         </div>
       ) : (
-        <div>
+        <div className="loading-container">
           <CircularProgress />
         </div>
       )}
