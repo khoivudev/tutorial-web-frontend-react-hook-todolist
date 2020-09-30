@@ -5,15 +5,17 @@ import Todo from "../Todo";
 TodoList.propTypes = {
   todos: PropTypes.array,
   onTodoTrashBtnClick: PropTypes.func,
+  onTodoCompletedBtnClick: PropTypes.func,
 };
 
 TodoList.defaultProps = {
   todos: [],
   onTodoTrashBtnClick: null,
+  onTodoCompletedBtnClick: null,
 };
 
 function TodoList(props) {
-  const { todos, onTodoTrashBtnClick } = props;
+  const { todos, onTodoTrashBtnClick, onTodoCompletedBtnClick } = props;
 
   return (
     <div className="todo-container">
@@ -22,7 +24,8 @@ function TodoList(props) {
           <Todo
             key={todo._id}
             todo={todo}
-            onTrashBtnClick={onTodoTrashBtnClick}
+            onTodoTrashBtnClick={onTodoTrashBtnClick}
+            onTodoCompletedBtnClick={onTodoCompletedBtnClick}
           />
         ))}
       </ul>

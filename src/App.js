@@ -9,10 +9,12 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 function App() {
   const [todoList, setTodoList] = useState([""]);
+  const [filteredtodoList, setFilteredTodoList] = useState([""]);
+  const [todoStatus, setTodoStatus] = useState("all");
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    async function fetchTodoList() {
+    const fetchTodoList = async () => {
       try {
         const res = await axios.get("/api/todotask");
         setTodoList(res.data);
@@ -20,11 +22,34 @@ function App() {
       } catch (err) {
         console.log("Oops");
       }
-    }
+    };
     fetchTodoList();
   }, []);
 
-  async function handleTodoDeleteBtnClick(todo) {
+  useEffect(() => {
+    //Function
+    const filterHandler = () => {
+      switch (todoStatus) {
+        case "completed":
+          setFilteredTodoList(
+            todoList.filter((todo) => todo.completed === true)
+          );
+          break;
+        case "uncompleted":
+          setFilteredTodoList(
+            todoList.filter((todo) => todo.completed === false)
+          );
+          break;
+        default:
+          setFilteredTodoList(todoList);
+          break;
+      }
+    };
+
+    filterHandler();
+  }, [todoList, todoStatus]);
+
+  const handleTodoDeleteBtnClick = async (todo) => {
     setIsLoaded(false);
     try {
       await axios.delete(`/api/todotask/${todo._id}`);
@@ -37,9 +62,33 @@ function App() {
       console.log("Oops");
     }
     setIsLoaded(true);
-  }
+  };
+  const handleTodoCompletedBtnClick = async (todo) => {
+    setIsLoaded(false);
+    try {
+      const updateField = { completed: `${!todo.completed}` };
+      await axios
+        .patch(`/api/todotask/${todo._id}`, updateField)
+        .then((res) => {
+          const newTodoList = todoList.map((item) => {
+            if (item._id === res.data._id) {
+              return {
+                ...item,
+                completed: res.data.completed,
+              };
+            }
+            return item;
+          });
+          setTodoList(newTodoList);
+        });
+    } catch (err) {
+      console.log("Oops");
+    }
 
-  async function handleTodoFormSubmit(formValues) {
+    setIsLoaded(true);
+  };
+
+  const handleTodoFormSubmit = async (formValues) => {
     setIsLoaded(false);
     try {
       const newTodo = {
@@ -54,7 +103,11 @@ function App() {
       console.log("Oops");
     }
     setIsLoaded(true);
-  }
+  };
+
+  const handleTodoStatusChange = (status) => {
+    setTodoStatus(status);
+  };
 
   return (
     <div className="App">
@@ -63,10 +116,14 @@ function App() {
       </header>
       {isLoaded ? (
         <div>
-          <TodoForm onSubmit={handleTodoFormSubmit} />
+          <TodoForm
+            onSubmit={handleTodoFormSubmit}
+            onSelectTodoStatus={handleTodoStatusChange}
+          />
           <TodoList
-            todos={todoList}
+            todos={filteredtodoList}
             onTodoTrashBtnClick={handleTodoDeleteBtnClick}
+            onTodoCompletedBtnClick={handleTodoCompletedBtnClick}
           />
         </div>
       ) : (

@@ -3,32 +3,42 @@ import PropTypes from "prop-types";
 
 Todo.propTypes = {
   todo: PropTypes.object,
-  onTrashBtnClick: PropTypes.func,
+  onTodoTrashBtnClick: PropTypes.func,
+  onTodoCompletedBtnClick: PropTypes.func,
 };
 
 Todo.defautProps = {
   todo: null,
-  onTrashBtnClick: null,
+  onTodoTrashBtnClick: null,
+  onTodoCompletedBtnClick: null,
 };
 
 function Todo(props) {
-  const { todo, onTrashBtnClick } = props;
+  const { todo, onTodoTrashBtnClick, onTodoCompletedBtnClick } = props;
 
-  const handleTrashBtn = () => {
-    if (onTrashBtnClick) {
-      onTrashBtnClick(todo);
+  const handleTrashBtnClick = () => {
+    if (onTodoTrashBtnClick) {
+      onTodoTrashBtnClick(todo);
     }
   };
 
+  const handleDeleteBtnClick = () => {
+    if (handleDeleteBtnClick) {
+      onTodoCompletedBtnClick(todo);
+    }
+  };
   return (
     <div className="todo">
-      <li className="todo-item" key={todo._id}>
+      <li
+        className={`todo-item ${todo.completed ? "completed" : ""}`}
+        key={todo._id}
+      >
         {todo.content}
       </li>
-      {/* <button className="complete-btn">
+      <button className="complete-btn" onClick={handleDeleteBtnClick}>
         <i className="fas fa-check"></i>
-      </button> */}
-      <button className="trash-btn" onClick={handleTrashBtn}>
+      </button>
+      <button className="trash-btn" onClick={handleTrashBtnClick}>
         <i className="fas fa-trash"></i>
       </button>
     </div>

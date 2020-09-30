@@ -3,6 +3,7 @@
 - Call GET API to Get data from database and render item todolist
 - Call DELETE API to Remove todolist item and delete item in database
 - Call ADD API to add new item to todolist
+- Call PATCH API to update completed state todo item
 
 - Separate UI (components) and Logic (App.js)
   - Passing props (array, func) between App.js and Component
